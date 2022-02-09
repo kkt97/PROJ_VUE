@@ -94,6 +94,9 @@ export default {
       })
           .then(res => console.log({res}))
           .catch(res => console.log({res}))
+
+      this.$router.push('/board')
+
     },
     async readItem() {
       const res1 = await axios.get(URL_API_BOARD)

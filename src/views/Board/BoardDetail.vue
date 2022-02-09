@@ -7,13 +7,10 @@
             <div>
               <div>제목: {{item.title}}</div>
               <div>내용: {{item.content}}</div>
-              <div>내용: {{item.image_path}}</div>
             </div>
             <div>
+              <img v-if="!this.item.image_path == 0" :src="`http://localhost:8000/` + this.item.image_path " />
               <div>글쓴이: {{ item.user && item.user.name }}</div>
-              <div style="padding:50px; position:relative;">
-                <img :src="`http://localhost:8000/` + this.item.image_path " />
-              </div>
               <div>등록일: {{moment(item.created_at).format('YYYY-MM-DD HH:MM')}}</div>
             </div>
           </div>
@@ -54,12 +51,10 @@ export default {
 
       console.log(this.item)
 
-
       const imagepath =this.item.image_path.replace('public', 'storage');
 
-      console.log(imagepath)
-
       this.item.image_path = imagepath
+
     },
     updateData(){
 
