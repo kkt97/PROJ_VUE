@@ -1,0 +1,12 @@
+.navbar {
+    padding-left: 1rem !important;
+}
+
+ol, ul, dl {
+    display:inherit; padding:0px 10px; list-style: none !important;
+    margin-bottom: 0rem !important;
+}
+
+.nav-link {
+    color: #fff !important;
+}
