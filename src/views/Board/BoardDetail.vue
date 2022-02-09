@@ -12,6 +12,7 @@
             <div>
               <div>글쓴이: {{ item.user && item.user.name }}</div>
               <div style="padding:50px; position:relative;">
+<!--                <img :src="`http://localhost:8000/storage/images/1644289678_스크린샷%202022-02-08%20오전%209.48.15.png`" />-->
                 <img :src="`http://localhost:8000/` + this.item.image_path " />
               </div>
               <div>등록일: {{moment(item.created_at).format('YYYY-MM-DD HH:MM')}}</div>
