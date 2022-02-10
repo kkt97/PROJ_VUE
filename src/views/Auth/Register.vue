@@ -7,35 +7,37 @@
           <div class="card-header">Register</div>
           <div class="card-body">
             <div class="row mb-3">
-              <label for="name" class="col-md-4 col-form-label text-md-end">이름</label>
+              <span for="name" class="col-md-4 col-form-label text-md-end">이름</span>
               <div class="col-md-6">
                 <input id="name" type="name" class="form-control" name="name" v-model="item.name" autofocus>
               </div>
-
             </div>
             <div class="row mb-3">
               <label for="user_id" class="col-md-4 col-form-label text-md-end">아이디</label>
               <div class="col-md-6">
                 <input id="user_id" type="text" class="form-control" name="user_id" v-model="item.user_id" autofocus>
+                <h5 style="color: red">{{ errMsg.user_id }}</h5>
+                <span class="ml-4 text-sm text-gray-500">아이디는 6 ~ 15글자입니다</span>
               </div>
             </div>
             <div class="row mb-3">
               <label for="email" class="col-md-4 col-form-label text-md-end">이메일</label>
               <div class="col-md-6">
                 <input id="email" type="email" class="form-control" name="email" v-model="item.email" autofocus>
+                  <h5 style="color: red">{{ errMsg.email }}</h5>
               </div>
             </div>
             <div class="row mb-3">
               <label for="phone" class="col-md-4 col-form-label text-md-end">핸드폰 번호</label>
               <div class="col-md-6">
                 <input id="phone" type="text" class="form-control" name="phone" v-model="item.phone" autofocus>
+                <h5 style="color: red">{{ errMsg.phone }}</h5>
               </div>
             </div>
             <div class="postcode-demo">
               <button @click="showPopup()" class="col-md-4">주소 입력하기</button>
               <PostCode v-if="visible" @address="addrSelected" @change="totalAddr"/>
             </div>
-            <div>기본주소 : {{this.addr1}}</div>
             <br>
             <div class="row mb-3">
               <label for="etcaddr" class="col-md-4 col-form-label text-md-end">상세 주소</label>
@@ -45,16 +47,19 @@
             </div>
             <div>모든 주소 : {{this.item.address}}</div>
             <div>우편 번호 : {{this.item.code}}</div>
+            <h5 style="color: red">{{ errMsg.address }}</h5>
             <div class="row mb-3">
               <label for="password" class="col-md-4 col-form-label text-md-end">비밀번호</label>
               <div class="col-md-6">
                 <input id="password" type="password" class="form-control" name="password" v-model="item.password" autofocus>
+                <h5 style="color: red">{{ errMsg.password }}</h5>
+                <span class="ml-4 text-sm text-gray-500">비밀번호는 8 ~ 20글자입니다</span>
               </div>
             </div>
             <div class="row mb-3">
-              <label for="passwordconfirm" class="col-md-4 col-form-label text-md-end">비밀번호 확인</label>
+              <label for="password" class="col-md-4 col-form-label text-md-end">비밀번호 확인</label>
               <div class="col-md-6">
-                <input id="passwordconfirm" type="password" class="form-control" name="passwordconfirm" v-model="item.passwordconfirm" autofocus>
+                <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" v-model="item.password_confirmation" autofocus>
               </div>
             </div>
             <div class="row mb-0">
@@ -85,7 +90,6 @@ import axios from 'axios'
 import { VueDaumPostcode } from "vue-daum-postcode"
 import Vue from "vue";
 import PostCode from "@/components/PostCode";
-import VueRouter from "vue-router";
 
 Vue.use(VueDaumPostcode)
 
@@ -101,6 +105,13 @@ export default {
 
   data() {
     return {
+      errMsg: {
+        address: '',
+        user_id: '',
+        email: '',
+        phone: '',
+        password: ''
+      },
       item: {
         id: 0,
         name: '',
@@ -108,7 +119,7 @@ export default {
         email: '',
         phone: '',
         password: '',
-        passwordconfirm: '',
+        password_confirmation: '',
         code: '',
         address: '',
       },
@@ -124,6 +135,7 @@ export default {
     showPopup() {
       this.visible = true;
     },
+
     addrSelected(detail){
       console.log("선택된 주소", detail);
       this.addr1 = detail.jibunAddress;
@@ -134,50 +146,37 @@ export default {
 
       this.visible = false;
     },
+
     totalAddr(){
       this.item.address = this.addr1 + ' ' + this.etcaddr;
     },
+
     async register() {
-      if (!this.item.name) {
-        alert("이름을 입력하세요.")
-        return;
-      } else if (!this.item.user_id){
-        alert("아이디를 입력해주세요.")
-        return;
-      } else if (!/^[a-zA-Z0-9]{8,}$/.test(this.item.user_id)){
-        alert("아이디는 영문 or 숫자 8자 이상으로 입력해 주세요.")
-        return;
-      } else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-          this.item.email)) {
-        alert("이메일 양식에 맞춰 입력해 주세요.")
-        return;
-      } else if (!/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(
-          this.item.phone)) {
-        alert("핸드폰 번호 양식에 맞춰 입력해 주세요.")
-        return;
-      } else if (!this.item.address){
-        alert("주소를 입력해 주세요.")
-        return;
-      } else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/.test(this.item.password)){
-        alert("비밀번호는 영문 or 숫자 or 특수문자 조합으로 8자 이상으로 입력해 주세요.")
-        return;
-      } else if (this.item.password != this.item.passwordconfirm){
-        alert("비밀번호가 다릅니다.")
-        return;
-      }
 
       const res = await axios.post(URL_API_REGISTER, {
         ...this.item
       }).then(res => {
         alert("회원가입이 되었습니다.")
-        window.location.href = "/";
+        this.$router.push('/')
       }).catch(e => {
-        alert("일치하는 회원이 있습니다.")
+        const error = e.response.data.errors;
+
+        console.log(error.user_id)
+        console.log(error.email)
+        console.log(error.phone)
+        console.log(error.password)
+        console.log(error.address)
+
+
+
+        this.errMsg = {
+          ...error
+        }
+
+        alert("회원가입이 되지 않았습니다.")
       })
-      console.log(res)
-
-
     },
+
     resetForm() {
       this.item = {
         name: '',
@@ -185,12 +184,14 @@ export default {
         email: '',
         phone: '',
         password: '',
-        passwordconfirm: '',
+        password_confirmation: '',
       };
     },
+
     goBack(){
       this.$router.go(-1); [2]
     },
+
   },
   mounted() {
     this.item.address

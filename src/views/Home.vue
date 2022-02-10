@@ -9,11 +9,11 @@
               여기는 홈입니다.<br>
             </div>
 
-            <a href="/login" class="btn btn-primary"> 홈페이지에 들어오시려면 로그인을 하셔야 합니다.</a>
+            <router-link to="/login" class="btn btn-primary"> 홈페이지에 들어오시려면 로그인을 하셔야 합니다.</router-link>
             <br>
             <br>
 
-            <a href="/register" class="btn btn-primary"> 아이디가 없으시면 회원가입을 하세요.</a>
+            <router-link to="/register" class="btn btn-primary"> 아이디가 없으시면 회원가입을 하세요.</router-link>
             <br>
             <br>
 
@@ -48,7 +48,6 @@ export default {
       const cookie = this.$cookie.get('accesstoken');
       console.log(cookie);
 
-      //axios.defaults.headers.common["X-access-token"] = cookie;
       axios.defaults.headers.Authorization = 'Bearer ' + cookie;
 
       const res = await axios.get(URL_API_LOGINCHECK)
@@ -65,6 +64,7 @@ export default {
       this.$cookie.delete("accesstoken");
       this.isCookie = document.cookie;
       alert("로그아웃 되었습니다.");
+      this.items = []
     }
   },
 

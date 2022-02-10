@@ -39,8 +39,8 @@
 
 
 <script>
-import axios from "axios";
-import moment from "moment";
+import axios from "axios"
+import moment from "moment"
 
 const URL_API_BOARD = 'http://localhost:8000/api/board'
 
@@ -64,17 +64,17 @@ export default {
     async readItems() {
       const res = axios.get(URL_API_BOARD, { params:this.params } )
           .then(response => {
-            this.items = response.data;
+            this.items = response.data
           })
       console.log(res)
 
     },
     prevPage() {
-      this.params.page -= 1;
+      this.params.page -= 1
       this.readItems()
     },
     nextPage(){
-      this.params.page += 1;
+      this.params.page += 1
       this.readItems()
     },
   },

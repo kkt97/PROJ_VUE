@@ -95,6 +95,7 @@ export default {
 
       return this.item;
     },
+
     onInputImage(){
       this.item.image = this.$refs.serveyImage.files
       console.log("this.item.image", this.$refs.serveyImage.files)
