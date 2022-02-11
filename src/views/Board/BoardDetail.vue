@@ -68,11 +68,16 @@ export default {
       window.location.href = '/board/' + this.$route.params.id + '/update'
     },
     async deleteData(){
-      const res = await axios.delete(URL_API_BOARD + '/' + this.$route.params.id)
+      if (confirm("정말 삭제하시겠습니까??") == true){
+        const res = await axios.delete(URL_API_BOARD + '/' + this.$route.params.id)
 
-      this.item = res.data
+        this.item = res.data
 
-      this.$router.push('/board')
+        this.$router.push('/board')
+
+      }else {
+        return false
+      }
     }
   },
   mounted() {

@@ -11,14 +11,26 @@
                 <label for="user_id" class="col-md-4 col-form-label text-md-end">아이디</label>
                 <div class="col-md-6">
                   <input id="user_id" type="text" class="form-control" name="user_id" v-model="item.user_id" autofocus>
-                  <h5 style="color: red">{{ errMsg.user_id }}</h5>
                 </div>
               </div>
               <div class="row mb-3">
                 <label for="password" class="col-md-4 col-form-label text-md-end">비밀번호</label>
                 <div class="col-md-6">
                   <input id="password" type="password" class="form-control" name="password" v-model="item.password" autofocus>
-                  <h5 style="color: red">{{ errMsg.password }}</h5>
+                  <h5 style="color: red">
+                    <div v-if="!errMsg == 0">
+                      <div v-if="errMsg == 'Error: Request failed with status code 422'">
+                          {{errMsg.response.data.user_id}}
+                          <br>
+                          {{errMsg.response.data.password}}
+                      </div>
+                      <div v-else-if="errMsg == 'Error: Request failed with status code 401'">
+                        아이디 혹은 비밀번호가 맞지 않습니다.
+                      </div>
+                    </div>
+                    <div v-else>
+                    </div>
+                  </h5>
                 </div>
               </div>
               <div class="row mb-0">
@@ -26,7 +38,7 @@
                   <button @click="login" class="btn btn-primary">
                     로그인
                   </button>
-                  <a class="btn btn-link" href="/register">
+                  <a class="btn btn-link" router="/register">
                     회원가입
                   </a>
                 </div>
@@ -50,16 +62,14 @@ export default {
   data() {
     return {
       errMsg: {
-        user_id: '',
-        password: ''
       },
       isLoggedIn: false,
       item: {
         user_id: '',
         password: '',
-        token: '',
       },
       errors: [],
+      token: '',
     }
   },
   methods: {
@@ -78,22 +88,13 @@ export default {
           alert("Welcome!")
           this.$router.push('/')
       })
+
       .catch(e => {
-        const error = e.response.data.errors;
-
-        console.log(error.user_id)
-        console.log(error.password)
-
-        this.errMsg = {
-          ...error
-        }
-
-        alert(`${this.errMsg.user_id}`&&`${this.errMsg.password}`)
-
+        this.errMsg = e
       })
-    },
-
+    }
   },
+
   watch: {
     'item': {
       deep: true,
