@@ -21,7 +21,7 @@
                     <div v-if="!errMsg == 0">
                       <div v-if="errMsg == 'Error: Request failed with status code 422'">
                           {{errMsg.response.data.user_id}}
-                          <br>
+                            <br>
                           {{errMsg.response.data.password}}
                       </div>
                       <div v-else-if="errMsg == 'Error: Request failed with status code 401'">

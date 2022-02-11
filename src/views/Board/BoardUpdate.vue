@@ -26,9 +26,20 @@
             <div class="row mb-3">
               <label for="name" class="col-md-2 col-form-label text-md-end">작성자</label>
               <div class="col-md-2">
-                <input id="name" type="name" class="form-control" name="name" v-model="item.user.name" :disabled="validated ? disabled : ''" autofocus>
+                <input id="name" type="name" class="form-control" name="name" v-model="item.user.name" disabled autofocus>
               </div>
             </div>
+
+            <div class="row mb-3">
+              <label for="image_name" class="col-md-2 col-form-label text-md-end">파일 이름</label>
+              <div class="col-md-2">
+                <input id="image_name" type="text" class="form-control" name="image_name" v-model="item.image_name" disabled autofocus>
+              </div>
+            </div>
+
+            <button @click="deleteImage" class="btn btn-primary">
+              사진 삭제
+            </button>
 
             <div class="row mb-3">
               <label class="col-md-2 col-form-label text-md-end"></label>
@@ -40,7 +51,7 @@
 
             <div class="row mb-0">
               <div class="col-md-6 offset-md-4">
-                <button @click="createData" class="btn btn-primary">
+                <button @click="updateData" class="btn btn-primary">
                   글 수정
                 </button>
                 &nbsp;
@@ -91,8 +102,6 @@ export default {
 
       this.item = res.data;
 
-      console.log(this.item)
-
       return this.item;
     },
 
@@ -101,26 +110,43 @@ export default {
       console.log("this.item.image", this.$refs.serveyImage.files)
     },
 
-    async createData() {
-      let formData = new FormData();
-      formData.append('id',this.input.id)
-      formData.append('title',this.input.title)
-      formData.append('content',this.input.content)
-      formData.append('name',this.input.name)
-      formData.append('image',this.input.image)
+    // async createData() {
+    //   let formData = new FormData();
+    //   formData.append('id',this.input.id)
+    //   formData.append('title',this.input.title)
+    //   formData.append('content',this.input.content)
+    //   formData.append('name',this.input.name)
+    //   formData.append('image',this.input.image)
+    //
+    //   console.log(formData)
+    //
+    //   axios.post(URL_API_BOARD, formData,{
+    //     headers : { 'Content-Type': 'multipart/form-data' }
+    //   })
+    //       .then(res => console.log({res}))
+    //       .catch(res => console.log({res}))
+    // },
+    updateData() {
 
-      console.log(formData)
-
-      const res = axios.post(URL_API_BOARD, formData,{
-        headers : { 'Content-Type': 'multipart/form-data' }
-      })
-          .then(res => console.log({res}))
-          .catch(res => console.log({res}))
     },
 
     onImageChange(event){
       console.log(event.target.files[0], typeof event.target.files)
       this.item.image= event.target.files[0];
+    },
+
+    async deleteImage(){
+      if (confirm("정말 삭제하시겠습니까??") == true){
+        await axios.put(URL_API_BOARD + '/' + this.$route.params.id, {
+          ...this.item,
+          'modeFileDelete': true,
+        })
+
+        await this.readItem()
+
+      }else {
+        return false
+      }
     },
 
     goBack(){
