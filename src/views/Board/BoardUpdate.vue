@@ -25,14 +25,14 @@
 
             <div class="row mb-3">
               <label for="name" class="col-md-2 col-form-label text-md-end">작성자</label>
-              <div class="col-md-2">
+              <div class="col-md-8">
                 <input id="name" type="name" class="form-control" name="name" v-model="item.user.name" disabled autofocus>
               </div>
             </div>
 
             <div class="row mb-3">
               <label for="image_name" class="col-md-2 col-form-label text-md-end">파일 이름</label>
-              <div class="col-md-2">
+              <div class="col-md-8">
                 <input id="image_name" type="text" class="form-control" name="image_name" v-model="item.image_name" disabled autofocus>
               </div>
             </div>
@@ -97,11 +97,8 @@ export default {
   methods: {
     async readItem() {
       const res = await axios.get(URL_API_BOARD + '/' + this.$route.params.id)
-
       if(!res.data.user) res.data.user = { name: '', }
-
       this.item = res.data;
-
       return this.item;
     },
 
@@ -110,24 +107,19 @@ export default {
       console.log("this.item.image", this.$refs.serveyImage.files)
     },
 
-    // async createData() {
-    //   let formData = new FormData();
-    //   formData.append('id',this.input.id)
-    //   formData.append('title',this.input.title)
-    //   formData.append('content',this.input.content)
-    //   formData.append('name',this.input.name)
-    //   formData.append('image',this.input.image)
-    //
-    //   console.log(formData)
-    //
-    //   axios.post(URL_API_BOARD, formData,{
-    //     headers : { 'Content-Type': 'multipart/form-data' }
-    //   })
-    //       .then(res => console.log({res}))
-    //       .catch(res => console.log({res}))
-    // },
-    updateData() {
-
+    async updateData() {
+      console.log('1')
+      if (confirm("수정하시겠습니까??") == true) {
+        const res = await axios.put(URL_API_BOARD + '/' + this.$route.params.id, {
+          ...this.item,
+          'modeFileDelete': false,
+          // false로 둠으로써 컨트롤러 else에서 실행됨.
+        })
+        console.log(res)
+        this.$router.push('/board')
+      }else {
+        return false
+      }
     },
 
     onImageChange(event){
@@ -141,9 +133,7 @@ export default {
           ...this.item,
           'modeFileDelete': true,
         })
-
         await this.readItem()
-
       }else {
         return false
       }
