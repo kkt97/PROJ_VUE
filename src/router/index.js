@@ -7,6 +7,7 @@ import BoardList from "@/views/Board/BoardList"
 import BoardDetail from "@/views/Board/BoardDetail"
 import BoardCreate from "@/views/Board/BoardCreate";
 import BoardUpdate from "@/views/Board/BoardUpdate";
+import Booking from "@/views/Booking/Booking";
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
         path: '/board/:id/update',
         name: 'BoardUpdate',
         component: BoardUpdate,
+    },
+    {
+        path: '/booking',
+        name: 'Booking',
+        component: Booking,
     },
 ];
 

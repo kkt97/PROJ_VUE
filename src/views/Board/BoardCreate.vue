@@ -92,7 +92,7 @@ export default {
       const res = axios.post(URL_API_BOARD, formData,{
         headers : { 'Content-Type': 'multipart/form-data' }
       })
-          .then(res => console.log({res}))
+          .then(res => console.log(res.data))
           .catch(res => console.log({res}))
 
       this.$router.push('/board')

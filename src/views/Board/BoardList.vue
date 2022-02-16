@@ -109,6 +109,7 @@ export default {
 
         this.search = '';
         this.showsearch = true;
+        this.readItems()
       })
       .catch(err => {
         console.log(err);

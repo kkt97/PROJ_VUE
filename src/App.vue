@@ -16,6 +16,11 @@
             <b-nav-item  class="marker" router-link to="/board">리뷰 게시판
             </b-nav-item>
           </li>
+          <li>
+            <b-nav-item  class="marker" router-link to="/booking">예약하기
+            </b-nav-item>
+          </li>
+
         </ul>
       </b-navbar>
     </div>
