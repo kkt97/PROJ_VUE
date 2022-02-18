@@ -109,7 +109,6 @@ export default {
 
         this.search = '';
         this.showsearch = true;
-        this.readItems()
       })
       .catch(err => {
         console.log(err);
@@ -136,6 +135,7 @@ export default {
   },
 
   mounted() {
+    console.log('aaa')
     this.readItems()
   },
 

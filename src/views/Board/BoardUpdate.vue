@@ -135,7 +135,7 @@ export default {
         }).catch(err => {console.log(err);
           alert("알수 없는 이유로 수정되지 않습니다.")})
           console.log(res)
-          this.$router.push('/board')
+        this.$router.push('/board')
       }else {
         return false
       }
