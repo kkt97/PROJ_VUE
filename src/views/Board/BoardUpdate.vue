@@ -56,6 +56,33 @@
                 수정시 파일을 업로드하려면 사진업로드를 눌러야 합니다.
               </h6>
             </div>
+
+            <div class="row mb-3">
+              <label for="image_name_2" class="col-md-2 col-form-label text-md-end">파일 이름</label>
+              <div class="col-md-8">
+                <input id="image_name_2" type="text" class="form-control" name="image_name_2" v-model="item.image_name_2" disabled autofocus>
+              </div>
+            </div>
+
+            <button @click="deleteImage2" class="btn btn-primary">
+              사진 삭제
+            </button>
+
+            <div class="row mb-3">
+              <label class="col-md-2 col-form-label text-md-end"></label>
+              <div class="col-md-8">
+                <input type="file"  @change="onImageChange2($event)" />
+              </div>
+            </div>
+
+            <div>
+              <button @click="uploadImage_2" class="btn btn-primary">
+                파일 업로드
+              </button>
+              <h6 style="color: red">
+                수정시 파일을 업로드하려면 사진업로드를 눌러야 합니다.
+              </h6>
+            </div>
             <br>
             <div class="row mb-0">
               <div class="col-md-6 offset-md-4">
@@ -94,6 +121,7 @@ export default {
         content: '',
         name: '',
         image: {},
+        image2: {},
         user: {
           name: '',
         },
@@ -110,10 +138,29 @@ export default {
       console.log("this.item.image", this.$refs.serveyImage.files)
     },
 
+    onInputImage2(){
+      this.item.image2 = this.$refs.serveyImage.files
+      console.log("this.item.image2", this.$refs.serveyImage.files)
+    },
+
+
     uploadImage() {
 
       let formData = new FormData();
       formData.append('image',this.item.image)
+      console.log(formData)
+
+      const res = axios.post(`${URL_API_BOARD}/${this.$route.params.id}`,formData, {
+        headers : { 'Content-Type': 'multipart/form-data' }
+      }).then(res => {
+        console.log(res.data)
+        this.readItem()
+      }).catch(res => { console.log({res}) })
+    },
+    uploadImage_2() {
+
+      let formData = new FormData();
+      formData.append('image2',this.item.image2)
       console.log(formData)
 
       const res = axios.post(`${URL_API_BOARD}/${this.$route.params.id}`,formData, {
@@ -145,6 +192,10 @@ export default {
       console.log(event.target.files[0], typeof event.target.files)
       this.item.image= event.target.files[0];
     },
+    onImageChange2(event){
+      console.log(event.target.files[0], typeof event.target.files)
+      this.item.image2= event.target.files[0];
+    },
 
     async deleteImage(){
       if (confirm("정말 삭제하시겠습니까??") === true) {
@@ -156,7 +207,21 @@ export default {
           alert(`${JSON.stringify(err)} 이유로 삭제되지 않습니다.`)
         })
         await this.readItem()
-      }},
+      }
+    },
+
+    async deleteImage2(){
+      if (confirm("정말 삭제하시겠습니까??") === true) {
+        await axios.put(`${URL_API_BOARD}/${this.$route.params.id}`, {
+          ...this.item,
+          'modeFileDelete_2': true,
+        }).catch(err => {
+          console.log(err);
+          alert(`${JSON.stringify(err)} 이유로 삭제되지 않습니다.`)
+        })
+        await this.readItem()
+      }
+    },
 
     async readItem() {
       const res = await axios.get(`${URL_API_BOARD}/${this.$route.params.id}`)

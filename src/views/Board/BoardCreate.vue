@@ -30,7 +30,13 @@
             <div class="row mb-3">
               <label class="col-md-2 col-form-label text-md-end"></label>
               <div class="col-md-8">
-                <input type="file"  @change="onImageChange($event)" />
+                <input type="file"  @change="onImageChange($event)"/>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-md-2 col-form-label text-md-end"></label>
+              <div class="col-md-8">
+                <input type="file"  @change="onImageChange2($event)" />
               </div>
             </div>
 
@@ -67,6 +73,7 @@ export default {
         content: '',
         name: '',
         image: {},
+        image2: {},
       },
       itemId: 0,
       items: [],
@@ -78,6 +85,12 @@ export default {
       this.input.image = this.$refs.serveyImage.files
       console.log("this.input.image", this.$refs.serveyImage.files)
     },
+
+    onInputImage2(){
+      this.input.image2 = this.$refs.serveyImage.files
+      console.log("this.input.image2", this.$refs.serveyImage.files)
+    },
+
     async createData() {
 
       let formData = new FormData();
@@ -86,6 +99,7 @@ export default {
       formData.append('content',this.input.content)
       formData.append('name',this.input.name)
       formData.append('image',this.input.image)
+      formData.append('image2',this.input.image2)
 
       console.log(formData)
 
@@ -106,6 +120,12 @@ export default {
     onImageChange(event){
       console.log(event.target.files[0], typeof event.target.files)
       this.input.image= event.target.files[0];
+      console.log('Sdasda sd' + this.input.image)
+    },
+    onImageChange2(event){
+      console.log(event.target.files[0], typeof event.target.files)
+      this.input.image2= event.target.files[0];
+      console.log('12312312312' + this.input.image2)
     },
     goBack(){
       this.$router.go(-1); [2]
